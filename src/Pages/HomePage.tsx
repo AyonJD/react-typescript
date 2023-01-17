@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Navbar from '../Components/Shared/Navbar';
+import Shop from '../Components/Shop/Shop';
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -13,7 +14,7 @@ const HomePage = () => {
     return (
         <div>
             <Navbar />
-
+            <Shop />
 
         </div>
     );

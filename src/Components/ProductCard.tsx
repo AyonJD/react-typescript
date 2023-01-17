@@ -3,18 +3,23 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
-type Product = {
-    _id: string;
-    name: string;
-    image: string;
-    category: string;
-    brand: string;
-    price: number;
-    year: number;
-};
+interface IMyProps { product: object, }
+interface ProductData {
+  _id: any;
+  name: string;
+  image: string;
+  category: string;
+  brand: string;
+  price: number;
+  year: number;
+}
 
-const ProductCard = ({ _id, name, image, category, brand, price, year }: Product) => {
-    console.log(name, image, category, brand, price, year);
+const ProductCard: React.FC<IMyProps> = ({product}) => {
+
+    // destructuring product
+  const { _id, name, image, category, brand, price, year } = product as ProductData;
+  console.log(_id, name, image, category, brand, price, year);
+
   // use for toast
     const [isAlreadyAvailable, setIsAlreadyAvailable] = useState(false);
     const navigate = useNavigate();
@@ -23,7 +28,7 @@ const ProductCard = ({ _id, name, image, category, brand, price, year }: Product
   return (
     <div className="bg-white rounded-md shadow  hover:shadow-lg duration-100 relative">
 
-      <div onClick={()=> navigate(`/product/${_id}`)} className="w-full h-[200px] overflow-hidden relative cursor-pointer ">
+      <div onClick={()=> navigate(`/product/s`)} className="w-full h-[200px] overflow-hidden relative cursor-pointer ">
         <img
           src={image}
           alt=""
@@ -61,7 +66,6 @@ const ProductCard = ({ _id, name, image, category, brand, price, year }: Product
           </div>
           <div className="flex items-center">
             <button
-            //   onClick={handleSetLocalStorage}
               className="bg-primary text-white btn-square btn-sm rounded-md flex justify-center items-center hover:bg-secondary hover:text-primary"
             >
               <MdAddShoppingCart size={20} />
