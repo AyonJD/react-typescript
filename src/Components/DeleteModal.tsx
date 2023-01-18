@@ -1,18 +1,9 @@
 import React from 'react';
 import { ImCross } from 'react-icons/im';
-import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface IMyProps { _id: object, setOpenDeleteModal: any, }
-// interface ProductData {
-//     _id: number;
-// }
 
 const DeleteModal: React.FC<IMyProps> = ({ _id, setOpenDeleteModal }) => {
-
-
-    // destructuring product
-    // const { _id } = id as ProductData;
-
 
     const handleDelete = () => {
         fetch(`http://localhost:5000/products/${_id}`, {
@@ -39,8 +30,6 @@ const DeleteModal: React.FC<IMyProps> = ({ _id, setOpenDeleteModal }) => {
                             <label onClick={()=> setOpenDeleteModal(false)} className='btn btn-success font-bold text-white rounded-md btn-sm'>No</label>
 
                     </div>
-                    
-                    {/* <h1>{_id}</h1> */}
                 </div>
             </div>
             
