@@ -14,7 +14,6 @@ const Navbar = () => {
 
   const {setSearchValue} = allDataContext;
 
-  // const [isOpen, setIsOpen] = React.useState(false);
   // use for open cart drawer
   const toggleDrawer = () => {
     setIsOpen(!isOpen);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";

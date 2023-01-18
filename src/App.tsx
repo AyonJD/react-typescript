@@ -12,10 +12,13 @@ const dataContext = createContext<SharedData | null>(null);
 
 function App() {
   const [searchValue, setSearchValue] = useState('');
+  const [selectedId, setSelectedId] = useState('');
 
   const dataToshare = {
     searchValue,
-    setSearchValue
+    setSearchValue,
+    selectedId,
+    setSelectedId,
   };
 
   return (

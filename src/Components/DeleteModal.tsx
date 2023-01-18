@@ -1,20 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { ImCross } from 'react-icons/im';
+import { dataContext } from '../App';
 
 interface IMyProps { _id: object, setOpenDeleteModal: any, }
 
 const DeleteModal: React.FC<IMyProps> = ({ _id, setOpenDeleteModal }) => {
+    const allDataContext = useContext(dataContext);
+    const { selectedId, setSelectedId } = allDataContext as any;
 
     const handleDelete = () => {
-        fetch(`http://localhost:5000/products/${_id}`, {
-            method: 'DELETE'
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data) {
-                    console.log(data)
-                }
-            })
+        setSelectedId(_id);
+        setOpenDeleteModal(false);
     }
 
 

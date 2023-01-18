@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { dataContext } from '../../App';
+import { _retriveStorage } from '../../Utils/utils';
 import ProductCard from '../ProductCard';
 
 const Shop = () => {
@@ -8,12 +9,24 @@ const Shop = () => {
     const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
     const [products, setProducts] = useState<any[]>([])
     const allDataContext = useContext(dataContext);
+    const [idToDelete, setIdToDelete] = useState<any>(null);
+    const { selectedId } = allDataContext as any;
 
     useEffect(() => {
         fetch('http://localhost:9000/products')
             .then(res => res.json())
             .then(data => setProducts(data))
     }, [])
+
+    // remove product by idToDelete
+    useEffect(() => {
+            const newProducts = products.filter((p) => {
+                return p._id !== selectedId;
+            });
+            setProducts(newProducts);
+      
+    }, [selectedId])
+
 
     if (!allDataContext) return null;
     const { searchValue } = allDataContext;
@@ -38,6 +51,16 @@ const Shop = () => {
                 return prev.filter((y) => y !== year);
             } else {
                 return [...prev, year];
+            }
+        });
+    };
+
+    const handleSelectedCategory = (category: string) => {
+        setSelectedCategory((prev) => {
+            if (prev.includes(category)) {
+                return prev.filter((c) => c !== category);
+            } else {
+                return [...prev, category];
             }
         });
     };
@@ -116,7 +139,7 @@ const Shop = () => {
                                     categories?.map((item) => (
                                         <div key={item?._id} className="form-control">
                                             <label className="label cursor-pointer flex justify-start gap-3 py-1">
-                                                <input type="checkbox" onChange={() => setSelectedCategory(item)} className="checkbox h-4 w-4 rounded" />
+                                                <input type="checkbox" onChange={() => handleSelectedCategory(item)} className="checkbox h-4 w-4 rounded" />
                                                 <span className="label-text">{item}</span>
                                             </label>
                                         </div>
