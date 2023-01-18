@@ -1,14 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { dataContext } from '../../App';
 import ProductCard from '../ProductCard';
 
 const Shop = () => {
     const [products, setProducts] = useState<any[]>([])
+    const allDataContext = useContext(dataContext);
 
     useEffect(() => {
         fetch('http://localhost:9000/products')
             .then(res => res.json())
             .then(data => setProducts(data))
     }, [])
+
+    if (!allDataContext) return null;
+    const { searchValue } = allDataContext;
+    
+    // filter products by searchValue and set to setProducts
+    const filteredProducts = products.filter((p) => p.name.toLowerCase().includes(searchValue.toLowerCase()));
+    
+        
 
 
     // get Categories without duplicates
@@ -97,15 +107,30 @@ const Shop = () => {
                             </div>
                         </div>
                         <div className='w-[80%]'>
-                            <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-4">
-                                {/* map product by typescript */}
-                                {
-                                    products?.map((item) => (
-                                        <ProductCard key={item?._id} product={item} />
-                                    )
-                                    )
-                                }
-                            </div>
+                            {
+                                filteredProducts?.length !== 0 ? (
+                                    <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-4">
+                                
+                                        {
+                                            filteredProducts?.map((item) => (
+                                                <ProductCard key={item?._id} product={item} />
+                                            )
+                                            )
+                                        }
+                                    </div>
+                                ): (
+                                        
+                                    <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-4">
+                                
+                                        {
+                                            products?.map((item) => (
+                                                <ProductCard key={item?._id} product={item} />
+                                            )
+                                            )
+                                        }
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
