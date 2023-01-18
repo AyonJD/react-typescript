@@ -3,6 +3,8 @@ import { dataContext } from '../../App';
 import ProductCard from '../ProductCard';
 
 const Shop = () => {
+    const [selectedBrand, setSelectedBrand] = useState<string[]>([]);
+    const [selectedYear, setSelectedYear] = useState<string[]>([]);
     const [products, setProducts] = useState<any[]>([])
     const allDataContext = useContext(dataContext);
 
@@ -18,7 +20,40 @@ const Shop = () => {
     // filter products by searchValue and set to setProducts
     const filteredProducts = products.filter((p) => p.name.toLowerCase().includes(searchValue.toLowerCase()));
     
-        
+    // selectedBrand and selectedYear
+    const handleSelectedBrand = (brand: string) => {
+        setSelectedBrand((prev) => {
+            if (prev.includes(brand)) {
+                return prev.filter((b) => b !== brand);
+            } else {
+                return [...prev, brand];
+            }
+        });
+    };
+
+    const handleSelectedYear = (year: string) => {
+        setSelectedYear((prev) => {
+            if (prev.includes(year)) {
+                return prev.filter((y) => y !== year);
+            } else {
+                return [...prev, year];
+            }
+        });
+    };
+
+    const filteredProductsByBrandAndYear = filteredProducts.filter((p) => {
+        if (selectedBrand.length === 0 && selectedYear.length === 0) {
+            return true;
+        } else if (selectedBrand.length === 0) {
+            return selectedYear.includes(p.year);
+        } else if (selectedYear.length === 0) {
+            return selectedBrand.includes(p.brand);
+        } else {
+            return selectedBrand.includes(p.brand) && selectedYear.includes(p.year);
+        }
+    });
+    
+
 
 
     // get Categories without duplicates
@@ -33,6 +68,7 @@ const Shop = () => {
     const yearSet = new Set(products.map((p) => p.year));
     const years = Array.from(yearSet).sort();
 
+    // console.log(selectedBrand, selectedYear);
     return (
         <div className='pb-14'>
             <div className='mid-container'>
@@ -82,7 +118,7 @@ const Shop = () => {
                                     brands?.map((item) => (
                                         <div key={item?._id} className="form-control">
                                             <label className="label cursor-pointer flex justify-start gap-3 py-1">
-                                                <input type="checkbox" className="checkbox h-4 w-4 rounded" />
+                                                <input type="checkbox" onChange={() => handleSelectedBrand(item)} className="checkbox h-4 w-4 rounded" />
                                                 <span className="label-text">{item}</span>
                                             </label>
                                         </div>
@@ -97,7 +133,7 @@ const Shop = () => {
                                     years?.map((item) => (
                                         <div key={item?._id} className="form-control">
                                             <label className="label cursor-pointer flex justify-start gap-3 py-1">
-                                                <input type="checkbox" className="checkbox h-4 w-4 rounded" />
+                                                <input type="checkbox" onChange={() => handleSelectedYear(item)} className="checkbox h-4 w-4 rounded" />
                                                 <span className="label-text">{item}</span>
                                             </label>
                                         </div>
@@ -108,7 +144,7 @@ const Shop = () => {
                         </div>
                         <div className='w-[80%]'>
                             {
-                                filteredProducts?.length !== 0 ? (
+                                filteredProducts?.length !== 0 && !filteredProductsByBrandAndYear ? (
                                     <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-4">
                                 
                                         {
@@ -123,7 +159,7 @@ const Shop = () => {
                                     <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-1 gap-4">
                                 
                                         {
-                                            products?.map((item) => (
+                                            filteredProductsByBrandAndYear?.map((item) => (
                                                 <ProductCard key={item?._id} product={item} />
                                             )
                                             )
